@@ -8,11 +8,11 @@ if %errorlevel% neq 0 (
 )
 xcopy /E /I /Y src\recursos bin\recursos > nul
 echo Main-Class: interfaz.Principal> manifiesto.txt
-jar cfm AulEmi.jar manifiesto.txt -C bin .
+jar cfm Noctua.jar manifiesto.txt -C bin .
 del manifiesto.txt
 echo.
 echo ========================================================
-echo  Ejecutable generado con exito: AulEmi.jar
-echo  Puedes abrirlo con doble clic o con: java -jar AulEmi.jar
+echo  Ejecutable generado con exito: Noctua.jar
+echo  Puedes abrirlo con doble clic o con: java -jar Noctua.jar
 echo ========================================================
 pause

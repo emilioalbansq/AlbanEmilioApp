@@ -24,15 +24,15 @@ public class LogoApp extends JPanel {
 
     private static BufferedImage cargarLogoPng() {
         try {
-            InputStream stream = LogoApp.class.getResourceAsStream("/recursos/logo_aulemi.png");
+            InputStream stream = LogoApp.class.getResourceAsStream("/recursos/logo_noctua.png");
             if (stream != null) {
                 BufferedImage img = ImageIO.read(stream);
                 stream.close();
                 return img;
             }
             String[] rutasDisco = {
-                "src/recursos/logo_aulemi.png",
-                "recursos/logo_aulemi.png"
+                "src/recursos/logo_noctua.png",
+                "recursos/logo_noctua.png"
             };
             for (String ruta : rutasDisco) {
                 File archivo = new File(ruta);
@@ -41,7 +41,7 @@ public class LogoApp extends JPanel {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Aviso: No se pudo cargar logo_aulemi.png: " + e.getMessage());
+            System.err.println("Aviso: No se pudo cargar logo_noctua.png: " + e.getMessage());
         }
         return null;
     }

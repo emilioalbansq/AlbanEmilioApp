@@ -56,7 +56,7 @@ public class VentanaPrincipal extends JFrame {
     public VentanaPrincipal() {
         this.controlador = new ControladorTutorias();
 
-        setTitle("AulEmi - Gestión de Tutorías Privadas");
+        setTitle("Noctua - Gestión de Tutorías Privadas");
         setSize(1120, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -75,7 +75,7 @@ public class VentanaPrincipal extends JFrame {
                 BorderFactory.createMatteBorder(0, 0, 1, 0, PaletaOscura.BORDE_SUTIL),
                 BorderFactory.createEmptyBorder(14, 22, 14, 22)));
 
-        JLabel titulo = new JLabel("AulEmi");
+        JLabel titulo = new JLabel("Noctua");
         titulo.setForeground(PaletaOscura.TEXTO_PRINCIPAL);
         titulo.setFont(PaletaOscura.FUENTE_TITULO);
 

@@ -41,7 +41,7 @@ public class DialogoNuevaClase extends JDialog {
     private List<Estudiante> estudiantesDisponibles;
 
     public DialogoNuevaClase(JFrame padre, ControladorTutorias controlador) {
-        super(padre, "Agendar Tutoría • AulEmi", true);
+        super(padre, "Agendar Tutoría • Noctua", true);
         this.controlador = controlador;
         this.claseGuardada = false;
         this.checksEstudiantes = new ArrayList<>();

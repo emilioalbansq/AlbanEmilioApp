@@ -25,7 +25,7 @@ public class DialogoNuevoEstudiante extends JDialog {
     private JComboBox<String> comboNivel;
 
     public DialogoNuevoEstudiante(JFrame padre, ControladorTutorias controlador) {
-        super(padre, "Nuevo Estudiante • AulEmi", true);
+        super(padre, "Nuevo Estudiante • Noctua", true);
         this.controlador = controlador;
         this.guardado = false;
 

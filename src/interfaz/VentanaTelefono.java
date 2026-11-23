@@ -62,7 +62,7 @@ public class VentanaTelefono extends JFrame {
         this.pestanaActiva = "AGENDA";
         this.botonesFiltroMateria = new ArrayList<>();
 
-        setTitle("AulEmi • Gestión de Tutorías");
+        setTitle("Noctua • Gestión de Tutorías");
         setIconImage(LogoApp.generarIconoVentana(64));
         setSize(446, 875);
         setResizable(false);
@@ -165,7 +165,7 @@ public class VentanaTelefono extends JFrame {
         textosTitulo.setLayout(new BoxLayout(textosTitulo, BoxLayout.Y_AXIS));
         textosTitulo.setBackground(PaletaMarina.NEGRO_FONDO);
 
-        JLabel lblApp = new JLabel("AulEmi");
+        JLabel lblApp = new JLabel("Noctua");
         lblApp.setForeground(PaletaMarina.TEXTO_BLANCO);
         lblApp.setFont(PaletaMarina.FUENTE_APP_TITULO);
 
