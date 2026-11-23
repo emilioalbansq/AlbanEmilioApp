@@ -1,6 +1,6 @@
 # AulEmi (`AlbanEmilioApp`)
 
-Prototipo en **Java (Swing)** con formato móvil vertical y paleta **negro profundo, azul marino y celeste** para gestionar tutorías privadas (Álgebra, Cálculo, Fundamentos de Matemática, Fundamentos de Física y Geometría) de 1 a 10 estudiantes.
+Prototipo móvil en **Java (Swing)** con paleta **negro abisal, azul marino y celeste luminoso**, logotipo vectorial propio e iconografía personalizada para gestionar tutorías privadas (Álgebra, Cálculo, Fundamentos de Matemática, Fundamentos de Física y Geometría) de 1 a 10 estudiantes.
 
 ## Arquitectura del Proyecto
 
@@ -10,7 +10,8 @@ AlbanEmilioApp/
 │   ├── entidades/        # Clases del dominio (Estudiante, ClaseTutoria, EjercicioPlanificado)
 │   ├── datos/            # Repositorio en memoria con listas ArrayList (RepositorioTutorias)
 │   ├── controladores/    # Lógica de negocio, validaciones y cálculos (ControladorTutorias)
-│   └── interfaz/         # Interfaz móvil moderna (VentanaTelefono, PanelRedondeado, BotonModerno, PaletaMarina, DialogoNuevaClase, DialogoNuevoEstudiante, Principal)
+│   └── interfaz/         # LogoApp, IconosVectoriales, PaletaMarina, PanelRedondeado, BotonModerno,
+│                         # VentanaTelefono, DialogoNuevaClase, DialogoNuevoEstudiante, Principal
 ├── compilar_y_ejecutar.bat
 ├── generar_ejecutable.bat
 └── README.md

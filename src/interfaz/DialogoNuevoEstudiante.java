@@ -26,11 +26,11 @@ public class DialogoNuevoEstudiante extends JDialog {
     private JComboBox<String> comboNivel;
 
     public DialogoNuevoEstudiante(JFrame padre, ControladorTutorias controlador) {
-        super(padre, "Nuevo Estudiante", true);
+        super(padre, "Nuevo Estudiante • AulEmi", true);
         this.controlador = controlador;
         this.guardado = false;
 
-        setSize(380, 390);
+        setSize(390, 420);
         setLocationRelativeTo(padre);
         getContentPane().setBackground(PaletaMarina.NEGRO_FONDO);
         setLayout(new BorderLayout());
@@ -44,18 +44,25 @@ public class DialogoNuevoEstudiante extends JDialog {
         contenedor.setBackground(PaletaMarina.NEGRO_FONDO);
         contenedor.setBorder(BorderFactory.createEmptyBorder(20, 22, 16, 22));
 
-        JLabel titulo = new JLabel("Registrar Estudiante");
+        JPanel cabecera = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        cabecera.setBackground(PaletaMarina.NEGRO_FONDO);
+        cabecera.setAlignmentX(LEFT_ALIGNMENT);
+
+        LogoApp miniLogo = new LogoApp(38);
+        JLabel titulo = new JLabel("Nuevo Estudiante");
         titulo.setForeground(PaletaMarina.TEXTO_BLANCO);
         titulo.setFont(PaletaMarina.FUENTE_APP_TITULO);
-        titulo.setAlignmentX(LEFT_ALIGNMENT);
 
-        JLabel subtitulo = new JLabel("Agrega un alumno para asignarlo a tus clases");
+        cabecera.add(miniLogo);
+        cabecera.add(titulo);
+
+        JLabel subtitulo = new JLabel("Registra un alumno para asignarlo a tus horarios");
         subtitulo.setForeground(PaletaMarina.TEXTO_GRIS_AZUL);
         subtitulo.setFont(PaletaMarina.FUENTE_PEQUENA);
         subtitulo.setAlignmentX(LEFT_ALIGNMENT);
 
-        contenedor.add(titulo);
-        contenedor.add(Box.createVerticalStrut(4));
+        contenedor.add(cabecera);
+        contenedor.add(Box.createVerticalStrut(6));
         contenedor.add(subtitulo);
         contenedor.add(Box.createVerticalStrut(18));
 
@@ -88,13 +95,13 @@ public class DialogoNuevoEstudiante extends JDialog {
 
         JPanel barraBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 12));
         barraBotones.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
-        barraBotones.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.BORDE_MARINO));
+        barraBotones.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.CELESTE_PROFUNDO));
 
         BotonModerno btnCancelar = new BotonModerno(
                 "Cancelar",
                 PaletaMarina.AZUL_MAR_MEDIO,
                 PaletaMarina.TEXTO_BLANCO,
-                16);
+                18);
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,7 +114,7 @@ public class DialogoNuevoEstudiante extends JDialog {
                 PaletaMarina.CELESTE_PROFUNDO,
                 PaletaMarina.CELESTE_BRILLANTE,
                 Color.BLACK,
-                16);
+                18);
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

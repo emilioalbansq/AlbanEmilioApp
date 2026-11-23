@@ -41,13 +41,13 @@ public class DialogoNuevaClase extends JDialog {
     private List<Estudiante> estudiantesDisponibles;
 
     public DialogoNuevaClase(JFrame padre, ControladorTutorias controlador) {
-        super(padre, "Agendar Tutoría", true);
+        super(padre, "Agendar Tutoría • AulEmi", true);
         this.controlador = controlador;
         this.claseGuardada = false;
         this.checksEstudiantes = new ArrayList<>();
         this.estudiantesDisponibles = controlador.obtenerEstudiantes();
 
-        setSize(400, 710);
+        setSize(410, 730);
         setLocationRelativeTo(padre);
         getContentPane().setBackground(PaletaMarina.NEGRO_FONDO);
         setLayout(new BorderLayout());
@@ -62,12 +62,18 @@ public class DialogoNuevaClase extends JDialog {
         contenido.setBackground(PaletaMarina.NEGRO_FONDO);
         contenido.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
 
-        JLabel titulo = new JLabel("Nueva Clase");
+        JPanel cabecera = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        cabecera.setBackground(PaletaMarina.NEGRO_FONDO);
+        cabecera.setAlignmentX(LEFT_ALIGNMENT);
+        cabecera.add(new LogoApp(38));
+
+        JLabel titulo = new JLabel("Agendar Tutoría");
         titulo.setForeground(PaletaMarina.TEXTO_BLANCO);
         titulo.setFont(PaletaMarina.FUENTE_APP_TITULO);
-        titulo.setAlignmentX(LEFT_ALIGNMENT);
-        contenido.add(titulo);
-        contenido.add(Box.createVerticalStrut(12));
+        cabecera.add(titulo);
+
+        contenido.add(cabecera);
+        contenido.add(Box.createVerticalStrut(14));
 
         // Materia
         contenido.add(crearEtiqueta("Materia"));
@@ -96,7 +102,7 @@ public class DialogoNuevaClase extends JDialog {
 
         JPanel colInicio = new JPanel(new BorderLayout(0, 4));
         colInicio.setBackground(PaletaMarina.NEGRO_FONDO);
-        colInicio.add(crearEtiqueta("Inicio"), BorderLayout.NORTH);
+        colInicio.add(crearEtiqueta("Hora Inicio"), BorderLayout.NORTH);
         comboHoraInicio = new JComboBox<>(bloques);
         comboHoraInicio.setSelectedItem("16:00");
         PaletaMarina.estilizarCombo(comboHoraInicio);
@@ -104,7 +110,7 @@ public class DialogoNuevaClase extends JDialog {
 
         JPanel colFin = new JPanel(new BorderLayout(0, 4));
         colFin.setBackground(PaletaMarina.NEGRO_FONDO);
-        colFin.add(crearEtiqueta("Fin"), BorderLayout.NORTH);
+        colFin.add(crearEtiqueta("Hora Fin"), BorderLayout.NORTH);
         comboHoraFin = new JComboBox<>(bloques);
         comboHoraFin.setSelectedItem("18:00");
         PaletaMarina.estilizarCombo(comboHoraFin);
@@ -165,7 +171,7 @@ public class DialogoNuevaClase extends JDialog {
         }
 
         JScrollPane scrollEstudiantes = new JScrollPane(listaChecks);
-        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaMarina.BORDE_MARINO));
+        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaMarina.CELESTE_PROFUNDO));
         scrollEstudiantes.setAlignmentX(LEFT_ALIGNMENT);
         contenido.add(scrollEstudiantes);
         contenido.add(Box.createVerticalStrut(10));
@@ -210,7 +216,7 @@ public class DialogoNuevaClase extends JDialog {
         JPanel barraInferior = new JPanel(new BorderLayout());
         barraInferior.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
         barraInferior.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.BORDE_MARINO),
+                BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.CELESTE_PROFUNDO),
                 BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 
         etiquetaTotalVivo = new JLabel("2.0h • $10.00");
@@ -224,7 +230,7 @@ public class DialogoNuevaClase extends JDialog {
                 "Cerrar",
                 PaletaMarina.AZUL_MAR_MEDIO,
                 PaletaMarina.TEXTO_BLANCO,
-                16);
+                18);
         btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -237,7 +243,7 @@ public class DialogoNuevaClase extends JDialog {
                 PaletaMarina.CELESTE_PROFUNDO,
                 PaletaMarina.CELESTE_BRILLANTE,
                 Color.BLACK,
-                16);
+                18);
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
