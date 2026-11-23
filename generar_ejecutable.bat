@@ -6,6 +6,7 @@ if %errorlevel% neq 0 (
     pause
     exit /b %errorlevel%
 )
+xcopy /E /I /Y src\recursos bin\recursos > nul
 echo Main-Class: interfaz.Principal> manifiesto.txt
 jar cfm AulEmi.jar manifiesto.txt -C bin .
 del manifiesto.txt

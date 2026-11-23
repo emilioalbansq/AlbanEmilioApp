@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JScrollBar;
@@ -30,41 +33,59 @@ public class PaletaMarina {
     public static final Color TEXTO_BLANCO = new Color(244, 250, 255);
     public static final Color TEXTO_GRIS_AZUL = new Color(148, 168, 194);
 
-    // Selección automática de tipografía geométrica moderna disponible en el sistema
-    public static final String FAMILIA_MODERNA = detectarFuenteModerna();
-    public static final String FAMILIA_NUMEROS = detectarFuenteNumeros();
+    // Tipografía Satoshi cargada desde recursos/fuentes/
+    private static final Font SATOSHI_REGULAR_BASE = cargarFuenteSatoshi("Satoshi-Regular.ttf", Font.PLAIN);
+    private static final Font SATOSHI_MEDIUM_BASE = cargarFuenteSatoshi("Satoshi-Medium.ttf", Font.PLAIN);
+    private static final Font SATOSHI_BOLD_BASE = cargarFuenteSatoshi("Satoshi-Bold.ttf", Font.BOLD);
+    private static final Font SATOSHI_BLACK_BASE = cargarFuenteSatoshi("Satoshi-Black.ttf", Font.BOLD);
 
-    public static final Font FUENTE_APP_TITULO = new Font(FAMILIA_MODERNA, Font.BOLD, 23);
-    public static final Font FUENTE_NUMERO_GRANDE = new Font(FAMILIA_NUMEROS, Font.BOLD, 28);
-    public static final Font FUENTE_SUBTITULO = new Font(FAMILIA_MODERNA, Font.BOLD, 15);
-    public static final Font FUENTE_CUERPO = new Font(FAMILIA_MODERNA, Font.PLAIN, 13);
-    public static final Font FUENTE_NEGRITA = new Font(FAMILIA_MODERNA, Font.BOLD, 12);
-    public static final Font FUENTE_PEQUENA = new Font(FAMILIA_MODERNA, Font.PLAIN, 11);
+    public static final Font FUENTE_APP_TITULO = SATOSHI_BLACK_BASE.deriveFont(23f);
+    public static final Font FUENTE_NUMERO_GRANDE = SATOSHI_BLACK_BASE.deriveFont(29f);
+    public static final Font FUENTE_SUBTITULO = SATOSHI_BOLD_BASE.deriveFont(15f);
+    public static final Font FUENTE_CUERPO = SATOSHI_REGULAR_BASE.deriveFont(13f);
+    public static final Font FUENTE_NEGRITA = SATOSHI_BOLD_BASE.deriveFont(12.5f);
+    public static final Font FUENTE_PEQUENA = SATOSHI_MEDIUM_BASE.deriveFont(11.5f);
 
-    private static String detectarFuenteModerna() {
-        String[] preferidas = {"Bahnschrift", "Century Gothic", "Trebuchet MS", "Verdana", "SansSerif"};
-        String[] disponibles = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        for (String candidata : preferidas) {
-            for (String instalada : disponibles) {
-                if (instalada.equalsIgnoreCase(candidata)) {
-                    return instalada;
-                }
-            }
-        }
-        return "SansSerif";
+    public static Font satoshiBold(float tamano) {
+        return SATOSHI_BOLD_BASE.deriveFont(tamano);
     }
 
-    private static String detectarFuenteNumeros() {
-        String[] preferidas = {"Bahnschrift", "Consolas", "Trebuchet MS", "SansSerif"};
-        String[] disponibles = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        for (String candidata : preferidas) {
-            for (String instalada : disponibles) {
-                if (instalada.equalsIgnoreCase(candidata)) {
-                    return instalada;
+    public static Font satoshiBlack(float tamano) {
+        return SATOSHI_BLACK_BASE.deriveFont(tamano);
+    }
+
+    public static Font satoshiRegular(float tamano) {
+        return SATOSHI_REGULAR_BASE.deriveFont(tamano);
+    }
+
+    private static Font cargarFuenteSatoshi(String nombreArchivo, int estiloRespaldo) {
+        String rutaClasspath = "/recursos/fuentes/" + nombreArchivo;
+        String[] rutasDisco = {
+            "src/recursos/fuentes/" + nombreArchivo,
+            "recursos/fuentes/" + nombreArchivo
+        };
+
+        try {
+            InputStream stream = PaletaMarina.class.getResourceAsStream(rutaClasspath);
+            if (stream == null) {
+                for (String ruta : rutasDisco) {
+                    File archivo = new File(ruta);
+                    if (archivo.exists()) {
+                        stream = new FileInputStream(archivo);
+                        break;
+                    }
                 }
             }
+            if (stream != null) {
+                Font fuente = Font.createFont(Font.TRUETYPE_FONT, stream);
+                stream.close();
+                GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fuente);
+                return fuente;
+            }
+        } catch (Exception e) {
+            System.err.println("Aviso: No se pudo cargar " + nombreArchivo + ": " + e.getMessage());
         }
-        return "SansSerif";
+        return new Font("SansSerif", estiloRespaldo, 13);
     }
 
     public static void estilizarCampo(JTextField campo) {

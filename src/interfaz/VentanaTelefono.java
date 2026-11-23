@@ -432,7 +432,7 @@ public class VentanaTelefono extends JFrame {
 
         JLabel lblTotal = new JLabel(String.format("$%.2f", clase.calcularTotalCobro()));
         lblTotal.setForeground(PaletaMarina.TURQUESA_EXITO);
-        lblTotal.setFont(new java.awt.Font(PaletaMarina.FAMILIA_NUMEROS, java.awt.Font.BOLD, 18));
+        lblTotal.setFont(PaletaMarina.satoshiBlack(18f));
 
         JPanel acciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 6, 0));
         acciones.setOpaque(false);

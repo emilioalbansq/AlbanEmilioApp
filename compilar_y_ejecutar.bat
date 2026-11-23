@@ -6,4 +6,5 @@ if %errorlevel% neq 0 (
     pause
     exit /b %errorlevel%
 )
+xcopy /E /I /Y src\recursos bin\recursos > nul
 java -cp bin interfaz.Principal
