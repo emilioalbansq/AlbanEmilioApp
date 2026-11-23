@@ -57,7 +57,7 @@ public class PanelRedondeado extends JPanel {
         int ancho = getWidth();
         int alto = getHeight();
         RoundRectangle2D formaExterior = new RoundRectangle2D.Float(
-                1.5f, 1.5f, ancho - 3f, alto - 3f, radioEsquinas, radioEsquinas);
+                1f, 1f, ancho - 2f, alto - 2f, radioEsquinas, radioEsquinas);
 
         if (colorDegradadoFin != null) {
             GradientPaint gradiente = new GradientPaint(0, 0, colorFondo, ancho, alto, colorDegradadoFin);
@@ -69,16 +69,16 @@ public class PanelRedondeado extends JPanel {
 
         if (colorBorde != null) {
             g2.setColor(colorBorde);
-            g2.setStroke(new BasicStroke(1.5f));
+            g2.setStroke(new BasicStroke(1.25f));
             g2.draw(formaExterior);
 
-            if (dobleBordeLuminoso && ancho > 16 && alto > 16) {
+            if (dobleBordeLuminoso && ancho > 20 && alto > 20) {
                 RoundRectangle2D formaInterior = new RoundRectangle2D.Float(
-                        4f, 4f, ancho - 8f, alto - 8f,
-                        Math.max(6, radioEsquinas - 4),
-                        Math.max(6, radioEsquinas - 4));
-                g2.setColor(new Color(147, 222, 255, 65));
-                g2.setStroke(new BasicStroke(1.0f));
+                        3.5f, 3.5f, ancho - 7f, alto - 7f,
+                        Math.max(6, radioEsquinas - 3),
+                        Math.max(6, radioEsquinas - 3));
+                g2.setColor(new Color(198, 212, 228, 36));
+                g2.setStroke(new BasicStroke(0.9f));
                 g2.draw(formaInterior);
             }
         }

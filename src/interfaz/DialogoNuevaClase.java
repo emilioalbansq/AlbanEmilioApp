@@ -3,7 +3,6 @@ package interfaz;
 import controladores.ControladorTutorias;
 import entidades.Estudiante;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -31,6 +30,7 @@ public class DialogoNuevaClase extends JDialog {
     private JTextField campoFecha;
     private JComboBox<String> comboHoraInicio;
     private JComboBox<String> comboHoraFin;
+    private JTextField campoCapitulo;
     private JTextField campoTema;
     private JTextField campoEjercicios;
     private JTextField campoTarifa;
@@ -47,7 +47,7 @@ public class DialogoNuevaClase extends JDialog {
         this.checksEstudiantes = new ArrayList<>();
         this.estudiantesDisponibles = controlador.obtenerEstudiantes();
 
-        setSize(410, 730);
+        setSize(415, 745);
         setLocationRelativeTo(padre);
         getContentPane().setBackground(PaletaMarina.NEGRO_FONDO);
         setLayout(new BorderLayout());
@@ -121,17 +121,32 @@ public class DialogoNuevaClase extends JDialog {
         contenido.add(filaHoras);
         contenido.add(Box.createVerticalStrut(10));
 
-        // Tema o capítulo
-        contenido.add(crearEtiqueta("Tema / Capítulo"));
-        contenido.add(Box.createVerticalStrut(4));
+        // Capítulo y Tema en dos campos separados
+        JPanel filaCapTema = new JPanel(new BorderLayout(8, 0));
+        filaCapTema.setBackground(PaletaMarina.NEGRO_FONDO);
+        filaCapTema.setAlignmentX(LEFT_ALIGNMENT);
+
+        JPanel colCap = new JPanel(new BorderLayout(0, 4));
+        colCap.setBackground(PaletaMarina.NEGRO_FONDO);
+        colCap.add(crearEtiqueta("Capítulo"), BorderLayout.NORTH);
+        campoCapitulo = new JTextField("Cap. 1");
+        PaletaMarina.estilizarCampo(campoCapitulo);
+        colCap.add(campoCapitulo, BorderLayout.CENTER);
+
+        JPanel colTema = new JPanel(new BorderLayout(0, 4));
+        colTema.setBackground(PaletaMarina.NEGRO_FONDO);
+        colTema.add(crearEtiqueta("Tema Principal"), BorderLayout.NORTH);
         campoTema = new JTextField();
         PaletaMarina.estilizarCampo(campoTema);
-        campoTema.setAlignmentX(LEFT_ALIGNMENT);
-        contenido.add(campoTema);
+        colTema.add(campoTema, BorderLayout.CENTER);
+
+        filaCapTema.add(colCap, BorderLayout.WEST);
+        filaCapTema.add(colTema, BorderLayout.CENTER);
+        contenido.add(filaCapTema);
         contenido.add(Box.createVerticalStrut(10));
 
-        // Ejercicios
-        contenido.add(crearEtiqueta("Ejercicios (separa varios con ;)"));
+        // Guía / Ejercicios
+        contenido.add(crearEtiqueta("Guía / Ejercicios (separa varios con ;)"));
         contenido.add(Box.createVerticalStrut(4));
         campoEjercicios = new JTextField();
         PaletaMarina.estilizarCampo(campoEjercicios);
@@ -171,7 +186,7 @@ public class DialogoNuevaClase extends JDialog {
         }
 
         JScrollPane scrollEstudiantes = new JScrollPane(listaChecks);
-        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaMarina.CELESTE_PROFUNDO));
+        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaMarina.BORDE_MARINO));
         scrollEstudiantes.setAlignmentX(LEFT_ALIGNMENT);
         contenido.add(scrollEstudiantes);
         contenido.add(Box.createVerticalStrut(10));
@@ -212,15 +227,14 @@ public class DialogoNuevaClase extends JDialog {
         PaletaMarina.estilizarScrollMovil(scrollPrincipal);
         add(scrollPrincipal, BorderLayout.CENTER);
 
-        // Barra inferior estilo móvil
         JPanel barraInferior = new JPanel(new BorderLayout());
         barraInferior.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
         barraInferior.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.CELESTE_PROFUNDO),
+                BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.BORDE_MARINO),
                 BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 
         etiquetaTotalVivo = new JLabel("2.0h • $10.00");
-        etiquetaTotalVivo.setForeground(PaletaMarina.CELESTE_BRILLANTE);
+        etiquetaTotalVivo.setForeground(PaletaMarina.TEXTO_BLANCO);
         etiquetaTotalVivo.setFont(PaletaMarina.FUENTE_SUBTITULO);
 
         JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
@@ -228,7 +242,7 @@ public class DialogoNuevaClase extends JDialog {
 
         BotonModerno btnCancelar = new BotonModerno(
                 "Cerrar",
-                PaletaMarina.AZUL_MAR_MEDIO,
+                PaletaMarina.AZUL_MAR_TARJETA,
                 PaletaMarina.TEXTO_BLANCO,
                 18);
         btnCancelar.addActionListener(new ActionListener() {
@@ -240,9 +254,9 @@ public class DialogoNuevaClase extends JDialog {
 
         BotonModerno btnGuardar = new BotonModerno(
                 "Agendar",
-                PaletaMarina.CELESTE_PROFUNDO,
+                PaletaMarina.TEXTO_BLANCO,
                 PaletaMarina.CELESTE_BRILLANTE,
-                Color.BLACK,
+                PaletaMarina.NEGRO_FONDO,
                 18);
         btnGuardar.addActionListener(new ActionListener() {
             @Override
@@ -276,12 +290,16 @@ public class DialogoNuevaClase extends JDialog {
             }
         }
 
+        String cap = campoCapitulo.getText() == null ? "" : campoCapitulo.getText().trim();
+        String tem = campoTema.getText() == null ? "" : campoTema.getText().trim();
+        String temaCombinado = tem.isEmpty() ? "" : (cap.isEmpty() ? tem : (cap + ": " + tem));
+
         String res = controlador.agendarNuevaClase(
                 campoFecha.getText(),
                 (String) comboHoraInicio.getSelectedItem(),
                 (String) comboHoraFin.getSelectedItem(),
                 (String) comboMateria.getSelectedItem(),
-                campoTema.getText(),
+                temaCombinado,
                 campoEjercicios.getText(),
                 seleccionados,
                 tarifa,

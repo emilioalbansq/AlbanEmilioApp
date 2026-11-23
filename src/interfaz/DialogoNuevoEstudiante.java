@@ -2,7 +2,6 @@ package interfaz;
 
 import controladores.ControladorTutorias;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -95,11 +94,11 @@ public class DialogoNuevoEstudiante extends JDialog {
 
         JPanel barraBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 12));
         barraBotones.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
-        barraBotones.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.CELESTE_PROFUNDO));
+        barraBotones.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.BORDE_MARINO));
 
         BotonModerno btnCancelar = new BotonModerno(
                 "Cancelar",
-                PaletaMarina.AZUL_MAR_MEDIO,
+                PaletaMarina.AZUL_MAR_TARJETA,
                 PaletaMarina.TEXTO_BLANCO,
                 18);
         btnCancelar.addActionListener(new ActionListener() {
@@ -111,9 +110,9 @@ public class DialogoNuevoEstudiante extends JDialog {
 
         BotonModerno btnGuardar = new BotonModerno(
                 "Guardar",
-                PaletaMarina.CELESTE_PROFUNDO,
+                PaletaMarina.TEXTO_BLANCO,
                 PaletaMarina.CELESTE_BRILLANTE,
-                Color.BLACK,
+                PaletaMarina.NEGRO_FONDO,
                 18);
         btnGuardar.addActionListener(new ActionListener() {
             @Override

@@ -29,7 +29,7 @@ public class BotonModerno extends JButton {
         this.radio = radio;
         this.encima = false;
 
-        configurarEstilo(colorTexto, PaletaMarina.FUENTE_NEGRITA, 8, 14);
+        configurarEstilo(colorTexto, PaletaMarina.FUENTE_NEGRITA, 7, 13);
     }
 
     public BotonModerno(String texto, Color colorInicio, Color colorFin, Color colorTexto, int radio) {
@@ -40,7 +40,7 @@ public class BotonModerno extends JButton {
         this.radio = radio;
         this.encima = false;
 
-        configurarEstilo(colorTexto, PaletaMarina.FUENTE_SUBTITULO, 10, 16);
+        configurarEstilo(colorTexto, PaletaMarina.FUENTE_SUBTITULO, 9, 15);
     }
 
     public void setColorBorde(Color colorBorde) {
@@ -98,8 +98,8 @@ public class BotonModerno extends JButton {
         g2.fill(forma);
 
         if (colorBorde != null) {
-            g2.setColor(encima ? PaletaMarina.CELESTE_BRILLANTE : colorBorde);
-            g2.setStroke(new BasicStroke(1.3f));
+            g2.setColor(encima ? PaletaMarina.TEXTO_BLANCO : colorBorde);
+            g2.setStroke(new BasicStroke(1.15f));
             g2.draw(forma);
         }
 
