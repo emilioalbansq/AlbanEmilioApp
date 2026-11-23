@@ -13,6 +13,19 @@ public class Estudiante {
         this.nivelAcademico = nivelAcademico;
     }
 
+    public String obtenerIniciales() {
+        if (nombreCompleto == null || nombreCompleto.trim().isEmpty()) {
+            return "ES";
+        }
+        String[] partes = nombreCompleto.trim().split(" ");
+        if (partes.length == 1) {
+            return partes[0].substring(0, 1).toUpperCase();
+        }
+        String primera = partes[0].substring(0, 1).toUpperCase();
+        String segunda = partes[1].substring(0, 1).toUpperCase();
+        return primera + segunda;
+    }
+
     public String getId() {
         return id;
     }

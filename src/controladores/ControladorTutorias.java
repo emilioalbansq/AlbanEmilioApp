@@ -23,7 +23,7 @@ public class ControladorTutorias {
     public ControladorTutorias() {
         this.repositorio = new RepositorioTutorias();
         this.contadorEstudiantes = 5;
-        this.contadorClases = 3;
+        this.contadorClases = 4;
     }
 
     public String registrarEstudiante(String nombreCompleto, String universidad, String nivelAcademico) {
@@ -31,7 +31,7 @@ public class ControladorTutorias {
             return "Escribe el nombre del estudiante.";
         }
         if (universidad == null || universidad.trim().isEmpty()) {
-            return "Indica la universidad.";
+            return "Selecciona la universidad.";
         }
 
         String nuevoId = "EST-" + contadorEstudiantes++;
@@ -86,7 +86,7 @@ public class ControladorTutorias {
             return "Selecciona al menos 1 estudiante.";
         }
         if (estudiantesSeleccionados.size() > MAXIMO_ESTUDIANTES_POR_CLASE) {
-            return "El límite máximo es de 10 estudiantes por clase.";
+            return "El cupo máximo es de 10 estudiantes por clase.";
         }
         if (tarifaPorHora <= 0) {
             return "La tarifa por hora debe ser mayor a cero.";

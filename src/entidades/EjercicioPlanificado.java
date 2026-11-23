@@ -14,6 +14,10 @@ public class EjercicioPlanificado {
         this.completado = completado;
     }
 
+    public void alternarCompletado() {
+        this.completado = !this.completado;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -28,11 +32,5 @@ public class EjercicioPlanificado {
 
     public void setCompletado(boolean completado) {
         this.completado = completado;
-    }
-
-    @Override
-    public String toString() {
-        String marca = completado ? "[Hecho] " : "[Pendiente] ";
-        return marca + descripcion;
     }
 }

@@ -3,6 +3,7 @@ package interfaz;
 import controladores.ControladorTutorias;
 import entidades.Estudiante;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,8 +11,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -35,213 +36,241 @@ public class DialogoNuevaClase extends JDialog {
     private JTextField campoTarifa;
     private JCheckBox checkCobroPorAlumno;
     private JLabel etiquetaCupos;
-    private JLabel etiquetaResumenCobro;
+    private JLabel etiquetaTotalVivo;
     private List<JCheckBox> checksEstudiantes;
-    private List<Estudiante> listaEstudiantesDisponibles;
+    private List<Estudiante> estudiantesDisponibles;
 
     public DialogoNuevaClase(JFrame padre, ControladorTutorias controlador) {
-        super(padre, "Agendar Nueva Tutoría", true);
+        super(padre, "Agendar Tutoría", true);
         this.controlador = controlador;
         this.claseGuardada = false;
         this.checksEstudiantes = new ArrayList<>();
-        this.listaEstudiantesDisponibles = controlador.obtenerEstudiantes();
+        this.estudiantesDisponibles = controlador.obtenerEstudiantes();
 
-        setSize(520, 620);
+        setSize(400, 710);
         setLocationRelativeTo(padre);
-        getContentPane().setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(PaletaMarina.NEGRO_FONDO);
+        setLayout(new BorderLayout());
 
         construirFormulario();
-        actualizarResumenEnVivo();
+        recalcularEnVivo();
     }
 
     private void construirFormulario() {
-        JPanel panelCampos = new JPanel();
-        panelCampos.setLayout(new BoxLayout(panelCampos, BoxLayout.Y_AXIS));
-        panelCampos.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        panelCampos.setBorder(BorderFactory.createEmptyBorder(16, 20, 10, 20));
+        JPanel contenido = new JPanel();
+        contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
+        contenido.setBackground(PaletaMarina.NEGRO_FONDO);
+        contenido.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
+
+        JLabel titulo = new JLabel("Nueva Clase");
+        titulo.setForeground(PaletaMarina.TEXTO_BLANCO);
+        titulo.setFont(PaletaMarina.FUENTE_APP_TITULO);
+        titulo.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(titulo);
+        contenido.add(Box.createVerticalStrut(12));
 
         // Materia
-        panelCampos.add(crearEtiqueta("Materia:"));
+        contenido.add(crearEtiqueta("Materia"));
+        contenido.add(Box.createVerticalStrut(4));
         comboMateria = new JComboBox<>(ControladorTutorias.MATERIAS_DISPONIBLES);
-        PaletaOscura.estilizarComboBox(comboMateria);
-        panelCampos.add(comboMateria);
-        panelCampos.add(espacio());
+        PaletaMarina.estilizarCombo(comboMateria);
+        comboMateria.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(comboMateria);
+        contenido.add(Box.createVerticalStrut(10));
 
-        // Fecha y Horarios disponibles
-        JPanel filaHorario = new JPanel(new GridLayout(1, 3, 10, 0));
-        filaHorario.setBackground(PaletaOscura.FONDO_PRINCIPAL);
+        // Día / Fecha
+        contenido.add(crearEtiqueta("Día y Fecha"));
+        contenido.add(Box.createVerticalStrut(4));
+        campoFecha = new JTextField("Vie 27 Nov");
+        PaletaMarina.estilizarCampo(campoFecha);
+        campoFecha.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(campoFecha);
+        contenido.add(Box.createVerticalStrut(10));
 
-        JPanel colFecha = new JPanel(new BorderLayout(0, 4));
-        colFecha.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        colFecha.add(crearEtiqueta("Día / Fecha:"), BorderLayout.NORTH);
-        campoFecha = new JTextField("Miércoles 25 Nov");
-        PaletaOscura.estilizarCampoTexto(campoFecha);
-        colFecha.add(campoFecha, BorderLayout.CENTER);
+        // Horarios
+        JPanel filaHoras = new JPanel(new GridLayout(1, 2, 10, 0));
+        filaHoras.setBackground(PaletaMarina.NEGRO_FONDO);
+        filaHoras.setAlignmentX(LEFT_ALIGNMENT);
 
-        String[] horasDisponibles = generarBloquesHorario();
+        String[] bloques = generarBloquesHorario();
 
         JPanel colInicio = new JPanel(new BorderLayout(0, 4));
-        colInicio.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        colInicio.add(crearEtiqueta("Hora Inicio:"), BorderLayout.NORTH);
-        comboHoraInicio = new JComboBox<>(horasDisponibles);
+        colInicio.setBackground(PaletaMarina.NEGRO_FONDO);
+        colInicio.add(crearEtiqueta("Inicio"), BorderLayout.NORTH);
+        comboHoraInicio = new JComboBox<>(bloques);
         comboHoraInicio.setSelectedItem("16:00");
-        PaletaOscura.estilizarComboBox(comboHoraInicio);
+        PaletaMarina.estilizarCombo(comboHoraInicio);
         colInicio.add(comboHoraInicio, BorderLayout.CENTER);
 
         JPanel colFin = new JPanel(new BorderLayout(0, 4));
-        colFin.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        colFin.add(crearEtiqueta("Hora Fin:"), BorderLayout.NORTH);
-        comboHoraFin = new JComboBox<>(horasDisponibles);
+        colFin.setBackground(PaletaMarina.NEGRO_FONDO);
+        colFin.add(crearEtiqueta("Fin"), BorderLayout.NORTH);
+        comboHoraFin = new JComboBox<>(bloques);
         comboHoraFin.setSelectedItem("18:00");
-        PaletaOscura.estilizarComboBox(comboHoraFin);
+        PaletaMarina.estilizarCombo(comboHoraFin);
         colFin.add(comboHoraFin, BorderLayout.CENTER);
 
-        filaHorario.add(colFecha);
-        filaHorario.add(colInicio);
-        filaHorario.add(colFin);
-        panelCampos.add(filaHorario);
-        panelCampos.add(espacio());
+        filaHoras.add(colInicio);
+        filaHoras.add(colFin);
+        contenido.add(filaHoras);
+        contenido.add(Box.createVerticalStrut(10));
 
-        // Tema / Capítulo
-        panelCampos.add(crearEtiqueta("Tema / Capítulo:"));
+        // Tema o capítulo
+        contenido.add(crearEtiqueta("Tema / Capítulo"));
+        contenido.add(Box.createVerticalStrut(4));
         campoTema = new JTextField();
-        PaletaOscura.estilizarCampoTexto(campoTema);
-        panelCampos.add(campoTema);
-        panelCampos.add(espacio());
+        PaletaMarina.estilizarCampo(campoTema);
+        campoTema.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(campoTema);
+        contenido.add(Box.createVerticalStrut(10));
 
-        // Ejercicios planeados
-        panelCampos.add(crearEtiqueta("Ejercicios planeados (separa varios con punto y coma ;):"));
+        // Ejercicios
+        contenido.add(crearEtiqueta("Ejercicios (separa varios con ;)"));
+        contenido.add(Box.createVerticalStrut(4));
         campoEjercicios = new JTextField();
-        PaletaOscura.estilizarCampoTexto(campoEjercicios);
-        panelCampos.add(campoEjercicios);
-        panelCampos.add(espacio());
+        PaletaMarina.estilizarCampo(campoEjercicios);
+        campoEjercicios.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(campoEjercicios);
+        contenido.add(Box.createVerticalStrut(10));
 
-        // Selección de estudiantes (máximo 10)
-        etiquetaCupos = crearEtiqueta("Estudiantes (0 / 10 cupos):");
-        panelCampos.add(etiquetaCupos);
+        // Alumnos (máximo 10)
+        etiquetaCupos = crearEtiqueta("Estudiantes (0 / 10 cupos)");
+        contenido.add(etiquetaCupos);
+        contenido.add(Box.createVerticalStrut(4));
 
-        JPanel panelListaEstudiantes = new JPanel();
-        panelListaEstudiantes.setLayout(new BoxLayout(panelListaEstudiantes, BoxLayout.Y_AXIS));
-        panelListaEstudiantes.setBackground(PaletaOscura.FONDO_CAMPO);
+        JPanel listaChecks = new JPanel();
+        listaChecks.setLayout(new BoxLayout(listaChecks, BoxLayout.Y_AXIS));
+        listaChecks.setBackground(PaletaMarina.AZUL_MAR_TARJETA);
+        listaChecks.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
 
-        for (Estudiante est : listaEstudiantesDisponibles) {
+        for (Estudiante est : estudiantesDisponibles) {
             JCheckBox check = new JCheckBox(est.toString());
-            check.setBackground(PaletaOscura.FONDO_CAMPO);
-            check.setForeground(PaletaOscura.TEXTO_PRINCIPAL);
-            check.setFont(PaletaOscura.FUENTE_NORMAL);
+            check.setBackground(PaletaMarina.AZUL_MAR_TARJETA);
+            check.setForeground(PaletaMarina.TEXTO_BLANCO);
+            check.setFont(PaletaMarina.FUENTE_CUERPO);
             check.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    int seleccionados = contarEstudiantesSeleccionados();
-                    if (seleccionados > ControladorTutorias.MAXIMO_ESTUDIANTES_POR_CLASE) {
+                    if (contarSeleccionados() > ControladorTutorias.MAXIMO_ESTUDIANTES_POR_CLASE) {
                         check.setSelected(false);
                         JOptionPane.showMessageDialog(
                                 DialogoNuevaClase.this,
-                                "Solo puedes asignar hasta 10 estudiantes por clase.",
-                                "Límite de cupos",
-                                JOptionPane.WARNING_MESSAGE);
+                                "Máximo 10 estudiantes por clase.");
                     }
-                    actualizarResumenEnVivo();
+                    recalcularEnVivo();
                 }
             });
             checksEstudiantes.add(check);
-            panelListaEstudiantes.add(check);
+            listaChecks.add(check);
         }
 
-        JScrollPane scrollEstudiantes = new JScrollPane(panelListaEstudiantes);
-        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaOscura.BORDE_SUTIL));
-        panelCampos.add(scrollEstudiantes);
-        panelCampos.add(espacio());
+        JScrollPane scrollEstudiantes = new JScrollPane(listaChecks);
+        scrollEstudiantes.setBorder(BorderFactory.createLineBorder(PaletaMarina.BORDE_MARINO));
+        scrollEstudiantes.setAlignmentX(LEFT_ALIGNMENT);
+        contenido.add(scrollEstudiantes);
+        contenido.add(Box.createVerticalStrut(10));
 
-        // Tarifa y modo de cobro
-        JPanel filaCobro = new JPanel(new GridLayout(1, 2, 10, 0));
-        filaCobro.setBackground(PaletaOscura.FONDO_PRINCIPAL);
+        // Precio por hora y modalidad
+        JPanel filaPrecio = new JPanel(new GridLayout(1, 2, 10, 0));
+        filaPrecio.setBackground(PaletaMarina.NEGRO_FONDO);
+        filaPrecio.setAlignmentX(LEFT_ALIGNMENT);
 
         JPanel colTarifa = new JPanel(new BorderLayout(0, 4));
-        colTarifa.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        colTarifa.add(crearEtiqueta("Tarifa por hora ($):"), BorderLayout.NORTH);
+        colTarifa.setBackground(PaletaMarina.NEGRO_FONDO);
+        colTarifa.add(crearEtiqueta("Precio / hora ($)"), BorderLayout.NORTH);
         campoTarifa = new JTextField("5.00");
-        PaletaOscura.estilizarCampoTexto(campoTarifa);
+        PaletaMarina.estilizarCampo(campoTarifa);
         colTarifa.add(campoTarifa, BorderLayout.CENTER);
 
-        checkCobroPorAlumno = new JCheckBox("Cobrar tarifa por cada alumno");
-        checkCobroPorAlumno.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        checkCobroPorAlumno.setForeground(PaletaOscura.TEXTO_PRINCIPAL);
-        checkCobroPorAlumno.setFont(PaletaOscura.FUENTE_NORMAL);
+        checkCobroPorAlumno = new JCheckBox("Cobrar por alumno");
+        checkCobroPorAlumno.setBackground(PaletaMarina.NEGRO_FONDO);
+        checkCobroPorAlumno.setForeground(PaletaMarina.CELESTE_SUAVE);
+        checkCobroPorAlumno.setFont(PaletaMarina.FUENTE_NEGRITA);
 
-        filaCobro.add(colTarifa);
-        filaCobro.add(checkCobroPorAlumno);
-        panelCampos.add(filaCobro);
+        filaPrecio.add(colTarifa);
+        filaPrecio.add(checkCobroPorAlumno);
+        contenido.add(filaPrecio);
 
-        // Listeners para cálculo automático
-        ActionListener refrescarCalculo = new ActionListener() {
+        ActionListener refrescar = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualizarResumenEnVivo();
+                recalcularEnVivo();
             }
         };
-        comboHoraInicio.addActionListener(refrescarCalculo);
-        comboHoraFin.addActionListener(refrescarCalculo);
-        checkCobroPorAlumno.addActionListener(refrescarCalculo);
-        campoTarifa.addActionListener(refrescarCalculo);
+        comboHoraInicio.addActionListener(refrescar);
+        comboHoraFin.addActionListener(refrescar);
+        checkCobroPorAlumno.addActionListener(refrescar);
+        campoTarifa.addActionListener(refrescar);
 
-        add(panelCampos, BorderLayout.CENTER);
+        JScrollPane scrollPrincipal = new JScrollPane(contenido);
+        PaletaMarina.estilizarScrollMovil(scrollPrincipal);
+        add(scrollPrincipal, BorderLayout.CENTER);
 
-        // Pie del diálogo: Resumen + Botones
-        JPanel panelInferior = new JPanel(new BorderLayout());
-        panelInferior.setBackground(PaletaOscura.FONDO_TARJETA);
-        panelInferior.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
+        // Barra inferior estilo móvil
+        JPanel barraInferior = new JPanel(new BorderLayout());
+        barraInferior.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
+        barraInferior.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, PaletaMarina.BORDE_MARINO),
+                BorderFactory.createEmptyBorder(12, 16, 12, 16)));
 
-        etiquetaResumenCobro = new JLabel("Total estimado: $10.00");
-        etiquetaResumenCobro.setForeground(PaletaOscura.VERDE_EXITO);
-        etiquetaResumenCobro.setFont(PaletaOscura.FUENTE_SUBTITULO);
+        etiquetaTotalVivo = new JLabel("2.0h • $10.00");
+        etiquetaTotalVivo.setForeground(PaletaMarina.CELESTE_BRILLANTE);
+        etiquetaTotalVivo.setFont(PaletaMarina.FUENTE_SUBTITULO);
 
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
-        panelBotones.setBackground(PaletaOscura.FONDO_TARJETA);
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        botones.setBackground(PaletaMarina.AZUL_MAR_OSCURO);
 
-        JButton botonCancelar = PaletaOscura.crearBoton("Cancelar", PaletaOscura.BORDE_SUTIL);
-        botonCancelar.addActionListener(new ActionListener() {
+        BotonModerno btnCancelar = new BotonModerno(
+                "Cerrar",
+                PaletaMarina.AZUL_MAR_MEDIO,
+                PaletaMarina.TEXTO_BLANCO,
+                16);
+        btnCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
             }
         });
 
-        JButton botonGuardar = PaletaOscura.crearBoton("Guardar Clase", PaletaOscura.AZUL_ACENTO);
-        botonGuardar.addActionListener(new ActionListener() {
+        BotonModerno btnGuardar = new BotonModerno(
+                "Agendar",
+                PaletaMarina.CELESTE_PROFUNDO,
+                PaletaMarina.CELESTE_BRILLANTE,
+                Color.BLACK,
+                16);
+        btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guardarClase();
             }
         });
 
-        panelBotones.add(botonCancelar);
-        panelBotones.add(botonGuardar);
+        botones.add(btnCancelar);
+        botones.add(btnGuardar);
 
-        panelInferior.add(etiquetaResumenCobro, BorderLayout.WEST);
-        panelInferior.add(panelBotones, BorderLayout.EAST);
+        barraInferior.add(etiquetaTotalVivo, BorderLayout.WEST);
+        barraInferior.add(botones, BorderLayout.EAST);
 
-        add(panelInferior, BorderLayout.SOUTH);
+        add(barraInferior, BorderLayout.SOUTH);
     }
 
     private void guardarClase() {
-        double tarifa = 0.0;
+        double tarifa;
         try {
             tarifa = Double.parseDouble(campoTarifa.getText().trim());
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Ingresa un precio válido por hora (ej. 5.00).");
+            JOptionPane.showMessageDialog(this, "Ingresa un precio válido (ej. 5.00).");
             return;
         }
 
         List<Estudiante> seleccionados = new ArrayList<>();
         for (int i = 0; i < checksEstudiantes.size(); i++) {
             if (checksEstudiantes.get(i).isSelected()) {
-                seleccionados.add(listaEstudiantesDisponibles.get(i));
+                seleccionados.add(estudiantesDisponibles.get(i));
             }
         }
 
-        String resultado = controlador.agendarNuevaClase(
+        String res = controlador.agendarNuevaClase(
                 campoFecha.getText(),
                 (String) comboHoraInicio.getSelectedItem(),
                 (String) comboHoraFin.getSelectedItem(),
@@ -252,67 +281,62 @@ public class DialogoNuevaClase extends JDialog {
                 tarifa,
                 checkCobroPorAlumno.isSelected());
 
-        if (resultado.equals("OK")) {
+        if (res.equals("OK")) {
             claseGuardada = true;
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, resultado, "Revisa los datos", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, res);
         }
     }
 
-    private void actualizarResumenEnVivo() {
-        int seleccionados = contarEstudiantesSeleccionados();
-        etiquetaCupos.setText("Estudiantes (" + seleccionados + " / 10 cupos):");
+    private void recalcularEnVivo() {
+        int sel = contarSeleccionados();
+        etiquetaCupos.setText("Estudiantes (" + sel + " / 10 cupos)");
 
         try {
-            String inicio = (String) comboHoraInicio.getSelectedItem();
+            String ini = (String) comboHoraInicio.getSelectedItem();
             String fin = (String) comboHoraFin.getSelectedItem();
-            String[] pI = inicio.split(":");
+            String[] pI = ini.split(":");
             String[] pF = fin.split(":");
-            int minI = Integer.parseInt(pI[0]) * 60 + Integer.parseInt(pI[1]);
-            int minF = Integer.parseInt(pF[0]) * 60 + Integer.parseInt(pF[1]);
-            double horas = (minF > minI) ? (minF - minI) / 60.0 : 0.0;
+            int mI = Integer.parseInt(pI[0]) * 60 + Integer.parseInt(pI[1]);
+            int mF = Integer.parseInt(pF[0]) * 60 + Integer.parseInt(pF[1]);
+            double horas = (mF > mI) ? (mF - mI) / 60.0 : 0.0;
 
             double tarifa = Double.parseDouble(campoTarifa.getText().trim());
-            int mult = (checkCobroPorAlumno.isSelected() && seleccionados > 0) ? seleccionados : 1;
+            int mult = (checkCobroPorAlumno.isSelected() && sel > 0) ? sel : 1;
             double total = horas * tarifa * mult;
 
-            etiquetaResumenCobro.setText(String.format("Tiempo: %.1f h  |  Total: $%.2f", horas, total));
+            etiquetaTotalVivo.setText(String.format("%.1fh  •  $%.2f", horas, total));
         } catch (Exception e) {
-            etiquetaResumenCobro.setText("Calculando...");
+            etiquetaTotalVivo.setText("Calculando...");
         }
     }
 
-    private int contarEstudiantesSeleccionados() {
-        int total = 0;
+    private int contarSeleccionados() {
+        int c = 0;
         for (JCheckBox check : checksEstudiantes) {
             if (check.isSelected()) {
-                total++;
+                c++;
             }
         }
-        return total;
+        return c;
     }
 
     private String[] generarBloquesHorario() {
-        List<String> bloques = new ArrayList<>();
-        for (int hora = 7; hora <= 21; hora++) {
-            bloques.add(String.format("%02d:00", hora));
-            bloques.add(String.format("%02d:30", hora));
+        List<String> lista = new ArrayList<>();
+        for (int h = 7; h <= 21; h++) {
+            lista.add(String.format("%02d:00", h));
+            lista.add(String.format("%02d:30", h));
         }
-        return bloques.toArray(new String[0]);
+        return lista.toArray(new String[0]);
     }
 
     private JLabel crearEtiqueta(String texto) {
-        JLabel etiqueta = new JLabel(texto);
-        etiqueta.setForeground(PaletaOscura.TEXTO_SECUNDARIO);
-        etiqueta.setFont(PaletaOscura.FUENTE_NEGRITA);
-        return etiqueta;
-    }
-
-    private JPanel espacio() {
-        JPanel p = new JPanel();
-        p.setBackground(PaletaOscura.FONDO_PRINCIPAL);
-        return p;
+        JLabel lbl = new JLabel(texto);
+        lbl.setForeground(PaletaMarina.CELESTE_SUAVE);
+        lbl.setFont(PaletaMarina.FUENTE_NEGRITA);
+        lbl.setAlignmentX(LEFT_ALIGNMENT);
+        return lbl;
     }
 
     public boolean isClaseGuardada() {

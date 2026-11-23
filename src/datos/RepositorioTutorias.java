@@ -13,10 +13,10 @@ public class RepositorioTutorias {
     public RepositorioTutorias() {
         this.listaEstudiantes = new ArrayList<>();
         this.listaClases = new ArrayList<>();
-        cargarDatosDeEjemplo();
+        cargarDatosIniciales();
     }
 
-    private void cargarDatosDeEjemplo() {
+    private void cargarDatosIniciales() {
         Estudiante est1 = new Estudiante("EST-1", "Mateo Paredes", "EPN", "Nivelación");
         Estudiante est2 = new Estudiante("EST-2", "Sofía Andrade", "ESPE", "1er Semestre");
         Estudiante est3 = new Estudiante("EST-3", "Carlos Mena", "EPN", "1er Semestre");
@@ -29,33 +29,51 @@ public class RepositorioTutorias {
 
         ClaseTutoria clase1 = new ClaseTutoria(
                 "CLS-1",
-                "Lunes 23 Nov",
+                "Lun 23 Nov",
                 "15:00",
                 "17:00",
                 "Cálculo",
-                "Capítulo 2: Límites y Continuidad",
+                "Cap. 2: Límites y Continuidad",
                 4.50,
                 true);
         clase1.agregarEstudiante(est1);
         clase1.agregarEstudiante(est3);
-        clase1.agregarEjercicio(new EjercicioPlanificado("Hoja de trabajo EPN: Ejercicios 1 al 10", true));
+        clase1.agregarEjercicio(new EjercicioPlanificado("Guía EPN: Ejercicios 1 al 10", true));
         clase1.agregarEjercicio(new EjercicioPlanificado("Límites indeterminados 0/0", false));
         clase1.setDictada(true);
 
         ClaseTutoria clase2 = new ClaseTutoria(
                 "CLS-2",
-                "Martes 24 Nov",
+                "Mar 24 Nov",
                 "18:00",
                 "19:30",
                 "Fundamentos de Física",
-                "Cinemática 1D y Movimiento Rectilíneo",
+                "Cinemática 1D y MRUV",
                 6.00,
                 false);
         clase2.agregarEstudiante(est2);
-        clase2.agregarEjercicio(new EjercicioPlanificado("Gráficas velocidad-tiempo y caída libre", false));
+        clase2.agregarEjercicio(new EjercicioPlanificado("Gráficas velocidad-tiempo", false));
+        clase2.agregarEjercicio(new EjercicioPlanificado("Problemas de caída libre (5 ej.)", false));
+
+        ClaseTutoria clase3 = new ClaseTutoria(
+                "CLS-3",
+                "Jue 26 Nov",
+                "16:00",
+                "18:00",
+                "Álgebra",
+                "Matrices y Determinantes",
+                5.00,
+                true);
+        clase3.agregarEstudiante(est1);
+        clase3.agregarEstudiante(est2);
+        clase3.agregarEstudiante(est4);
+        clase3.agregarEjercicio(new EjercicioPlanificado("Regla de Cramer y sistemas 3x3", false));
+        clase3.setDictada(true);
+        clase3.setPagada(true);
 
         listaClases.add(clase1);
         listaClases.add(clase2);
+        listaClases.add(clase3);
     }
 
     public void guardarEstudiante(Estudiante estudiante) {

@@ -7,8 +7,8 @@ public class Principal {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                VentanaPrincipal ventana = new VentanaPrincipal();
-                ventana.setVisible(true);
+                VentanaTelefono appMovil = new VentanaTelefono();
+                appMovil.setVisible(true);
             }
         });
     }

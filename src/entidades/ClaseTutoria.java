@@ -88,7 +88,7 @@ public class ClaseTutoria {
 
     public String obtenerNombresEstudiantes() {
         if (listaEstudiantes.isEmpty()) {
-            return "Sin asignar";
+            return "Sin alumnos";
         }
         StringBuilder texto = new StringBuilder();
         for (int i = 0; i < listaEstudiantes.size(); i++) {
@@ -105,7 +105,7 @@ public class ClaseTutoria {
             return "Pagada";
         }
         if (dictada) {
-            return "Dictada (Por cobrar)";
+            return "Dictada";
         }
         return "Programada";
     }
